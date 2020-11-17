@@ -6,7 +6,7 @@ Check the screenshots for the visual appearance of each control.
 
 - ButtonControlArray, an array of Button controls where each button can be associated with different click event.
 - MyOvalShape, an oval shape control which could be manipulated to look as an LED light or just a decoration on the form.
-- MyRectangleShape, the same as the oval shape control but in rectangular form.
+- MyRectangleShape, somewhat similar to the oval shape control but in rectangular form.
 - RotatingImage1, a control that allows a fully visible image be rotated and/or flipped.
 - RotatingImage2, a control that allows 9 different anchor points for image rotation (intended for special images).
 - RotatingTextButton, a button control allowing horizontal, vertical and upside down text.
