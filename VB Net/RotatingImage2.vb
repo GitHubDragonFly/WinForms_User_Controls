@@ -117,10 +117,12 @@ Public Class RotatingImage2
             If img IsNot value Then
                 img = value
                 If img IsNot Nothing Then
+                    BackColor = Color.Transparent
                     'Custom loaded image
                     ratio = img.Width / img.Height
                     Size = New Size(img.Width, img.Height)
                 Else
+                    BackColor = Color.Gainsboro
                     'Built-in image
                     ratio = 1.0F
                     Size = New Size(96, 96)

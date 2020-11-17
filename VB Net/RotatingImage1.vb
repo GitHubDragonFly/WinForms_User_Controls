@@ -116,10 +116,12 @@ Public Class RotatingImage1
             If img IsNot value Then
                 img = value
                 If img IsNot Nothing Then
+                    BackColor = Color.Transparent
                     '* To account for proper image rotation, the size of the control, both width and height, will be equal to
                     '* the loaded image's diagonal length measured from top-left corner to bottom-right corner
                     imgSize = Math.Sqrt(img.Width ^ 2 + img.Height ^ 2)
                 Else
+                    BackColor = Color.Gainsboro
                     '* Built-in image size is 96x96 which gives approximate diagonal length of 136.
                     imgSize = 136
                 End If
