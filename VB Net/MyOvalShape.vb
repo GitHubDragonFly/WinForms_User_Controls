@@ -486,6 +486,7 @@ Public Class MyOvalShape
             End Get
             Set(value As Color)
                 _lineColor = value
+
                 RaiseEvent PropertyChanged("EllipseLineColor")
             End Set
         End Property
@@ -498,6 +499,7 @@ Public Class MyOvalShape
             End Get
             Set(value As Color)
                 _lineONcolor = value
+
                 RaiseEvent PropertyChanged("EllipseLine_ON_Color")
             End Set
         End Property
@@ -514,10 +516,10 @@ Public Class MyOvalShape
                 Return _lineWidth
             End Get
             Set(value As Single)
-                If Not IsNumeric(value) Then value = 2.0F
-                If value < 0 Then value = 2.0F
-                If value > 20 Then value = 20.0F
+                If value < 0 OrElse value > 20 Then value = 2.0F
+
                 _lineWidth = value
+
                 RaiseEvent PropertyChanged("EllipseLineWidth")
             End Set
         End Property
@@ -544,6 +546,7 @@ Public Class MyOvalShape
             End Get
             Set(value As EllipseFillTypeOption)
                 _EllipseFillType = value
+
                 If _EllipseFillType = EllipseFillTypeOption.HatchStyle Then
                     If EllipseFillColor = Color.Transparent Then
                         MessageBox.Show("The EllipseFillColor is currently set to Transparent. It will be changed to make the HatchStyle visible.")
@@ -560,6 +563,7 @@ Public Class MyOvalShape
                     EllipseFillColor1Alpha = 255
                     EllipseFillColor2Alpha = 125
                 End If
+
                 RaiseEvent PropertyChanged("EllipseFillType")
             End Set
         End Property
@@ -572,6 +576,7 @@ Public Class MyOvalShape
             End Get
             Set(value As Color)
                 _brushColor = value
+
                 RaiseEvent PropertyChanged("EllipseFillColor")
             End Set
         End Property
@@ -584,6 +589,7 @@ Public Class MyOvalShape
             End Get
             Set(value As Color)
                 _fillONcolor = value
+
                 RaiseEvent PropertyChanged("EllipseFill_ON_Color")
             End Set
         End Property
@@ -596,6 +602,7 @@ Public Class MyOvalShape
             End Get
             Set(value As HStyle)
                 _hatchStyle = value
+
                 RaiseEvent PropertyChanged("EllipseFillHatchStyle")
             End Set
         End Property
@@ -608,6 +615,7 @@ Public Class MyOvalShape
             End Get
             Set(value As HStyleBground)
                 _hatchStyleBground = value
+
                 If _EllipseFillType = EllipseFillTypeOption.HatchStyle Then
                     If _hatchStyleBground = HStyleBground.Plain Then
                         EllipseFillColor1Alpha = 255
@@ -617,6 +625,7 @@ Public Class MyOvalShape
                         EllipseFillColor2Alpha = 125
                     End If
                 End If
+
                 RaiseEvent PropertyChanged("EllipseFillHatchStyleBackground")
             End Set
         End Property
@@ -633,10 +642,10 @@ Public Class MyOvalShape
                 Return _angle
             End Get
             Set(value As Single)
-                If Not (IsNumeric(value)) Then value = 0.0F
-                If value < 0 Then value = 0.0F
-                If value > 180 Then value = 180.0F
+                If value < 0 OrElse value > 180 Then value = 0.0F
+
                 _angle = value
+
                 RaiseEvent PropertyChanged("EllipseFillLinearGradientAngle")
             End Set
         End Property
@@ -653,11 +662,10 @@ Public Class MyOvalShape
                 Return _FocusPoint
             End Get
             Set(value As Single)
-                If Not IsNumeric(value) Then value = 0.5F
-                If EllipseFillLinearGradientShape = EllipseFillLinearGradientShapeOption.Normal Then value = 0.0F
-                If value < 0 Then value = 0.0F
-                If value > 1 Then value = 1.0F
+                If EllipseFillLinearGradientShape = EllipseFillLinearGradientShapeOption.Normal OrElse value < 0 OrElse value > 1 Then value = 0.0F
+
                 _FocusPoint = value
+
                 RaiseEvent PropertyChanged("EllipseFillLinearGradientShapeFocusPoint")
             End Set
         End Property
@@ -669,10 +677,10 @@ Public Class MyOvalShape
                 Return _alpha1
             End Get
             Set(value As Integer)
-                If Not IsNumeric(value) Then value = 255
-                If value < 0 Then value = 0
-                If value > 255 Then value = 255
+                If value < 0 OrElse value > 255 Then value = 255
+
                 _alpha1 = value
+
                 RaiseEvent PropertyChanged("EllipseFillColor1Alpha")
             End Set
         End Property
@@ -684,10 +692,10 @@ Public Class MyOvalShape
                 Return _alpha2
             End Get
             Set(value As Integer)
-                If Not IsNumeric(value) Then value = 125
-                If value < 0 Then value = 0
-                If value > 255 Then value = 255
+                If value < 0 OrElse value > 255 Then value = 125
+
                 _alpha2 = value
+
                 RaiseEvent PropertyChanged("EllipseFillColor2Alpha")
             End Set
         End Property
@@ -700,6 +708,7 @@ Public Class MyOvalShape
             End Get
             Set(value As EllipseFillLinearGradientShapeOption)
                 _EllipseFillLinearGradientShape = value
+
                 RaiseEvent PropertyChanged("EllipseFillLinearGradientShape")
             End Set
         End Property
@@ -716,10 +725,10 @@ Public Class MyOvalShape
                 Return _StartAngle
             End Get
             Set(value As Single)
-                If Not (IsNumeric(value)) Then value = 0.0F
-                If value < -360 Then value = 0.0F
-                If value > 360 Then value = 0.0F
+                If value < -360 OrElse value > 360 Then value = 0.0F
+
                 _StartAngle = value
+
                 RaiseEvent PropertyChanged("ArcPieStartAngle")
             End Set
         End Property
@@ -736,10 +745,10 @@ Public Class MyOvalShape
                 Return _SweepAngle
             End Get
             Set(value As Single)
-                If Not (IsNumeric(value)) Then value = 0.0F
-                If value < -360 Then value = 0.0F
-                If value > 360 Then value = 0.0F
+                If value < -360 OrElse value > 360 Then value = 45.0F
+
                 _SweepAngle = value
+
                 RaiseEvent PropertyChanged("ArcPieSweepAngle")
             End Set
         End Property
@@ -752,6 +761,7 @@ Public Class MyOvalShape
             End Get
             Set(value As Color)
                 _fillPieColor = value
+
                 RaiseEvent PropertyChanged("EllipseFillPieColor")
             End Set
         End Property
@@ -764,6 +774,7 @@ Public Class MyOvalShape
             End Get
             Set(value As Color)
                 _fillPieONColor = value
+
                 RaiseEvent PropertyChanged("EllipseFillPieONColor")
             End Set
         End Property
@@ -776,6 +787,7 @@ Public Class MyOvalShape
             End Get
             Set(value As Color)
                 _fillLineColor = value
+
                 RaiseEvent PropertyChanged("ArcPieLineColor")
             End Set
         End Property
@@ -788,6 +800,7 @@ Public Class MyOvalShape
             End Get
             Set(value As Color)
                 _fillLineONColor = value
+
                 RaiseEvent PropertyChanged("ArcPieLine_ON_Color")
             End Set
         End Property
@@ -804,10 +817,10 @@ Public Class MyOvalShape
                 Return _fillLineWidth
             End Get
             Set(value As Single)
-                If Not IsNumeric(value) Then value = 1.0F
-                If value < 0 Then value = 0.0F
-                If value > 10 Then value = 10.0F
+                If value < 0 OrElse value > 10 Then value = 1.0F
+
                 _fillLineWidth = value
+
                 RaiseEvent PropertyChanged("ArcPieLineWidth")
             End Set
         End Property

@@ -229,18 +229,20 @@ Public Class MyRectangleShape
             End Get
             Set(value As Color)
                 _lineColor = value
+
                 RaiseEvent PropertyChanged("RectangleLineColor")
             End Set
         End Property
 
-        Private _lineONcolor As Drawing.Color = Drawing.Color.Red
+        Private _lineONcolor As Color = Color.Red
         <Browsable(True), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible), RefreshProperties(RefreshProperties.All), Description("The Rectangle line ON color."), DefaultValue(GetType(Color), "Red")>
-        Public Property RectangleLine_ON_Color As Drawing.Color
+        Public Property RectangleLine_ON_Color As Color
             Get
                 Return _lineONcolor
             End Get
-            Set(value As Drawing.Color)
+            Set(value As Color)
                 _lineONcolor = value
+
                 RaiseEvent PropertyChanged("RectangleLine_ON_Color")
             End Set
         End Property
@@ -257,10 +259,10 @@ Public Class MyRectangleShape
                 Return _lineWidth
             End Get
             Set(value As Single)
-                If Not IsNumeric(value) Then value = 2.0F
-                If value < 0 Then value = 0.0F
-                If value > 20 Then value = 20.0F
+                If value < 0 OrElse value > 20 Then value = 2.0F
+
                 _lineWidth = value
+
                 RaiseEvent PropertyChanged("RectangleLineWidth")
             End Set
         End Property
@@ -287,18 +289,20 @@ Public Class MyRectangleShape
             End Get
             Set(value As Color)
                 _brushColor = value
+
                 RaiseEvent PropertyChanged("RectangleFillColor")
             End Set
         End Property
 
-        Private _fillONcolor As Drawing.Color = Drawing.Color.Red
+        Private _fillONcolor As Color = Color.Red
         <Browsable(True), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible), RefreshProperties(RefreshProperties.All), Description("The rectangle fill ON color."), DefaultValue(GetType(Color), "Red")>
-        Public Property RectangleFill_ON_Color As Drawing.Color
+        Public Property RectangleFill_ON_Color As Color
             Get
                 Return _fillONcolor
             End Get
-            Set(value As Drawing.Color)
+            Set(value As Color)
                 _fillONcolor = value
+
                 RaiseEvent PropertyChanged("RectangleFill_ON_Color")
             End Set
         End Property
@@ -367,6 +371,7 @@ Public Class MyRectangleShape
             End Get
             Set(value As HStyle)
                 _hatchStyle = value
+
                 RaiseEvent PropertyChanged("RectangleFillHatchStyle")
             End Set
         End Property
@@ -384,10 +389,12 @@ Public Class MyRectangleShape
             End Get
             Set(value As HStyleBground)
                 _hatchStyleBground = value
+
                 If _hatchStyleBground = HStyleBground.Plain Then
                     RectangleFillColor1Alpha = 255
                     RectangleFillColor2Alpha = 0
                 End If
+
                 RaiseEvent PropertyChanged("RectangleFillHatchStyleBackground")
             End Set
         End Property
@@ -404,10 +411,10 @@ Public Class MyRectangleShape
                 Return _angle
             End Get
             Set(value As Single)
-                If Not IsNumeric(value) Then value = 45.0F
-                If value < 0 Then value = 0.0F
-                If value > 180 Then value = 180.0F
+                If value < 0 OrElse value > 180 Then value = 0.0F
+
                 _angle = value
+
                 RaiseEvent PropertyChanged("RectangleFillLinearGradientAngle")
             End Set
         End Property
@@ -424,11 +431,10 @@ Public Class MyRectangleShape
                 Return _FocusPoint
             End Get
             Set(value As Single)
-                If RectangleFillLinearGradientShape = RectangleFillLinearGradientShapeOption.Normal Then value = 0.0F
-                If Not IsNumeric(value) Then value = 0.0F
-                If value < 0 Then value = 0.0F
-                If value > 1 Then value = 1.0F
+                If RectangleFillLinearGradientShape = RectangleFillLinearGradientShapeOption.Normal OrElse value < 0 OrElse value > 1 Then value = 0.0F
+
                 _FocusPoint = value
+
                 RaiseEvent PropertyChanged("RectangleFillLinearGradientShapeFocusPoint")
             End Set
         End Property
@@ -440,9 +446,8 @@ Public Class MyRectangleShape
                 Return _alpha1
             End Get
             Set(value As Integer)
-                If Not IsNumeric(value) Then value = 255
-                If value < 0 Then value = 0
-                If value > 255 Then value = 255
+                If value < 0 OrElse value > 255 Then value = 255
+
                 If _RectangleFillType = RectangleFillTypeOption.HatchStyle Then
                     If RectangleFillHatchStyleBackground = HStyleBground.Plain Then
                         _alpha1 = 255
@@ -452,6 +457,7 @@ Public Class MyRectangleShape
                 Else
                     _alpha1 = value
                 End If
+
                 RaiseEvent PropertyChanged("RectangleFillColor1Alpha")
             End Set
         End Property
@@ -463,9 +469,8 @@ Public Class MyRectangleShape
                 Return _alpha2
             End Get
             Set(value As Integer)
-                If Not IsNumeric(value) Then value = 125
-                If value < 0 Then value = 0
-                If value > 255 Then value = 255
+                If value < 0 OrElse value > 255 Then value = 125
+
                 If _RectangleFillType = RectangleFillTypeOption.HatchStyle Then
                     If RectangleFillHatchStyleBackground = HStyleBground.Plain Then
                         _alpha2 = 0
@@ -475,6 +480,7 @@ Public Class MyRectangleShape
                 Else
                     _alpha2 = value
                 End If
+
                 RaiseEvent PropertyChanged("RectangleFillColor2Alpha")
             End Set
         End Property
@@ -494,6 +500,7 @@ Public Class MyRectangleShape
             End Get
             Set(value As RectangleFillTypeOption)
                 _RectangleFillType = value
+
                 If _RectangleFillType = RectangleFillTypeOption.HatchStyle Then
                     If RectangleFillColor = Color.Transparent Then
                         MessageBox.Show("The RectangleFillColor is currently set to Transparent. It will be changed to make the HatchStyle visible.")
@@ -510,6 +517,7 @@ Public Class MyRectangleShape
                     RectangleFillColor1Alpha = 255
                     RectangleFillColor2Alpha = 125
                 End If
+
                 RaiseEvent PropertyChanged("RectangleFillType")
             End Set
         End Property
@@ -528,6 +536,7 @@ Public Class MyRectangleShape
             End Get
             Set(value As RectangleFillLinearGradientShapeOption)
                 _RectangleFillLinearGradientShape = value
+
                 RaiseEvent PropertyChanged("RectangleFillLinearGradientShape")
             End Set
         End Property
