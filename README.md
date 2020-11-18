@@ -22,7 +22,8 @@ Relatively simple WinForms user controls for VB or C# projects.
   - a button control allowing horizontal, vertical and upside down text.
   - certain fonts will show as symbols.
 - RotationalPositionIndicator
-  - a control which could potentially be used as a weather vane.
+  - a control to indicate rotational position/angle.
+  - could potentially be used as a weather vane.
   - zero point could be selected as either of E (0), N (90), W (270) or S (270).
 
 Check the screenshots for the visual appearance of each control.
