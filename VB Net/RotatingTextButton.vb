@@ -20,7 +20,7 @@ Public Class RotatingTextButton
         Get
             Return Colors_ctc
         End Get
-        Set(ByVal value As CustomTextColors)
+        Set(value As CustomTextColors)
             Colors_ctc = value
             Invalidate()
         End Set
@@ -32,11 +32,11 @@ Public Class RotatingTextButton
         Get
             Return m_text
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             If m_text <> value Then
                 m_text = value
+                Invalidate()
             End If
-            Invalidate()
         End Set
     End Property
 
@@ -46,11 +46,11 @@ Public Class RotatingTextButton
         Get
             Return m_btnBckGradient
         End Get
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             If m_btnBckGradient <> value Then
                 m_btnBckGradient = value
+                Invalidate()
             End If
-            Invalidate()
         End Set
     End Property
 
@@ -68,13 +68,18 @@ Public Class RotatingTextButton
         Get
             Return m_Dir
         End Get
-        Set(ByVal value As Direction)
+        Set(value As Direction)
             If m_Dir <> value Then
                 m_Dir = value
-                If m_Dir = Direction.Normal OrElse m_Dir = Direction.VerticalRight Then m_Angle = 0
-                If m_Dir = Direction.UpsideDown OrElse m_Dir = Direction.VerticalLeft Then m_Angle = 180
+
+                If m_Dir = Direction.Normal OrElse m_Dir = Direction.VerticalRight Then
+                    m_Angle = 0
+                Else
+                    m_Angle = 180
+                End If
+
+                Invalidate()
             End If
-            Invalidate()
         End Set
     End Property
 
@@ -90,11 +95,11 @@ Public Class RotatingTextButton
         Get
             Return m_brush
         End Get
-        Set(ByVal value As Brush)
+        Set(value As Brush)
             If m_brush <> value Then
                 m_brush = value
+                Invalidate()
             End If
-            Invalidate()
         End Set
     End Property
 
@@ -104,13 +109,13 @@ Public Class RotatingTextButton
         Get
             Return m_alpha
         End Get
-        Set(ByVal value As Integer)
-            If value < 0 Then value = 0
-            If value > 255 Then value = 255
+        Set(value As Integer)
+            If value < 0 OrElse value > 255 Then value = 100
+
             If m_alpha <> value Then
                 m_alpha = value
+                Invalidate()
             End If
-            Invalidate()
         End Set
     End Property
 
@@ -120,39 +125,33 @@ Public Class RotatingTextButton
         Get
             Return m_lgAngle
         End Get
-        Set(ByVal value As Integer)
-            If value < 0 Then value = 0
-            If value > 360 Then value = 0
+        Set(value As Integer)
+            If value < 0 OrElse value > 360 Then value = 45
+
             If m_lgAngle <> value Then
                 m_lgAngle = value
+                Invalidate()
             End If
-            Invalidate()
         End Set
     End Property
 
-    '***************************************************************
-    '* Property - Highlight Color
-    '***************************************************************
-    Private _Highlightcolor As Drawing.Color = Drawing.Color.Green
-    Public Property HighlightColor() As Drawing.Color
+    Private _Highlightcolor As Color = Color.Green
+    Public Property HighlightColor() As Color
         Get
             Return _Highlightcolor
         End Get
-        Set(ByVal value As Drawing.Color)
+        Set(value As Color)
             _Highlightcolor = value
         End Set
     End Property
 
-    '***************************************************************
-    '* Property - Highlight
-    '***************************************************************
-    Private OriginalBackcolor As Drawing.Color = Nothing
+    Private OriginalBackcolor As Color = Nothing
     Private _Highlight As Boolean
     Public Property Highlight() As Boolean
         Get
             Return _Highlight
         End Get
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             If OriginalBackcolor = Nothing Then
                 OriginalBackcolor = MyBase.BackColor
             End If
@@ -185,7 +184,7 @@ Public Class RotatingTextButton
 
 #Region "Private Methods"
 
-    Private Sub CustomTextColors_PropertyChanged(ByVal propertyName As String) Handles Colors_ctc.PropertyChanged
+    Private Sub CustomTextColors_PropertyChanged(propertyName As String) Handles Colors_ctc.PropertyChanged
         Invalidate()
     End Sub
 
@@ -193,7 +192,7 @@ Public Class RotatingTextButton
 
 #Region "Protected Methods"
 
-    Protected Overrides Sub OnPaint(ByVal e As System.Windows.Forms.PaintEventArgs)
+    Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
         Dim gp As New GraphicsPath
@@ -221,8 +220,7 @@ Public Class RotatingTextButton
             e.Graphics.RotateTransform(-CSng(m_Angle))
             e.Graphics.TranslateTransform(-ClientRectangle.Width / 2, -ClientRectangle.Height / 2)
 
-            Dim color1 As Color
-            Dim color2 As Color
+            Dim color1, color2 As Color
 
             If Colors_ctc.CustomTextColorsEnable Then
                 color1 = Colors_ctc.CustomTextColor1
@@ -232,10 +230,10 @@ Public Class RotatingTextButton
                 color2 = ForeColor
             End If
 
-            If m_brush = 0 Then
+            If m_brush = Brush.SolidBrush Then
                 e.Graphics.DrawString(ButtonText, Font, New SolidBrush(color1), ClientRectangle, format)
                 Exit Sub
-            ElseIf m_brush = 1 Then
+            ElseIf m_brush = Brush.LinearGradientBrush Then
                 Dim lgBrush As New LinearGradientBrush(ClientRectangle, color1, Color.FromArgb(m_alpha, ControlPaint.Light(color2)), m_lgAngle)
                 e.Graphics.DrawString(ButtonText, Font, lgBrush, ClientRectangle, format)
             Else
@@ -253,7 +251,7 @@ Public Class RotatingTextButton
     <Serializable(), TypeConverter(GetType(ExpandableObjectConverter)), RefreshProperties(RefreshProperties.Repaint), DesignTimeVisible(True)>
     Public Class CustomTextColors
 
-        Event PropertyChanged(ByVal propertyName As String)
+        Event PropertyChanged(propertyName As String)
 
         Public Sub New()
         End Sub
@@ -264,7 +262,7 @@ Public Class RotatingTextButton
             Get
                 Return m_customColorsEnable
             End Get
-            Set(ByVal value As Boolean)
+            Set(value As Boolean)
                 If m_customColorsEnable <> value Then
                     m_customColorsEnable = value
                     RaiseEvent PropertyChanged("CustomTextColorsEnable")
@@ -278,7 +276,7 @@ Public Class RotatingTextButton
             Get
                 Return m_color1
             End Get
-            Set(ByVal value As Color)
+            Set(value As Color)
                 m_color1 = value
                 RaiseEvent PropertyChanged("CustomTextColor1")
             End Set
@@ -290,7 +288,7 @@ Public Class RotatingTextButton
             Get
                 Return m_color2
             End Get
-            Set(ByVal value As Color)
+            Set(value As Color)
                 m_color2 = value
                 RaiseEvent PropertyChanged("CustomTextColor2")
             End Set
