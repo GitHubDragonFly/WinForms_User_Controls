@@ -6,6 +6,7 @@ Relatively simple WinForms user controls for VB or C# projects.
   - an array of Button controls where each button's click event can be associated with a different action.
 - MyOvalShape
   - an oval shape control which could be manipulated to look as an LED light or just a decoration on the form.
+  - allows for the Arc and Pie fill shapes to have symmetry and rotate (animation).
 - MyRectangleShape
   - somewhat similar to the oval shape control but in rectangular form.
 - RotatingImage1
