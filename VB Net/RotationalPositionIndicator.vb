@@ -21,9 +21,36 @@
 '* If needed, the "Value" property can be used to show the actual received angle value.
 
 Imports System.ComponentModel
+Imports System.Drawing.Drawing2D
 
 Public Class RotationalPositionIndicator
     Inherits Control
+
+#Region "Constructor"
+
+    Public Sub New()
+        MyBase.New()
+
+        SetStyle(ControlStyles.OptimizedDoubleBuffer Or ControlStyles.AllPaintingInWmPaint Or ControlStyles.UserPaint Or ControlStyles.ResizeRedraw Or ControlStyles.ContainerControl Or ControlStyles.SupportsTransparentBackColor, True)
+        MyBase.DoubleBuffered = True
+        DoubleBuffered = True
+        MyBase.BackColor = Color.Transparent
+        MyBase.ForeColor = Color.Black
+        Size = New Size(160, 160)
+        MinimumSize = New Size(60, 60)
+    End Sub
+
+    Protected Overrides Sub Dispose(disposing As Boolean)
+        Try
+            If disposing Then
+
+            End If
+        Finally
+            MyBase.Dispose(disposing)
+        End Try
+    End Sub
+
+#End Region
 
 #Region "Properties"
 
@@ -70,8 +97,8 @@ Public Class RotationalPositionIndicator
     End Property
 
     Enum Zero
-        N = 90
         E = 0
+        N = 90
         W = 180
         S = 270
     End Enum
@@ -90,8 +117,22 @@ Public Class RotationalPositionIndicator
         End Set
     End Property
 
-    Private m_suffixShow = True
-    <Browsable(True), RefreshProperties(RefreshProperties.All), Description("Indicates whether to dispaly suffix text after the degrees value (suffix = N, NE, E, SE, S, SW, W or NW)."), DefaultValue(True)>
+    Private m_zeroLineShow As Boolean = True
+    <Browsable(True), RefreshProperties(RefreshProperties.All), Description("Show the zero/home line."), DefaultValue(True)>
+    Public Property RPI_ZeroLineShow As Boolean
+        Get
+            Return m_zeroLineShow
+        End Get
+        Set(value As Boolean)
+            If m_zeroLineShow <> value Then
+                m_zeroLineShow = value
+                Invalidate()
+            End If
+        End Set
+    End Property
+
+    Private m_suffixShow As Boolean
+    <Browsable(True), RefreshProperties(RefreshProperties.All), Description("Indicates whether to dispaly suffix text after the degrees value (suffix = N, NE, E, SE, S, SW, W or NW)."), DefaultValue(False)>
     Public Property RPI_ShowSuffix As Boolean
         Get
             Return m_suffixShow
@@ -100,8 +141,8 @@ Public Class RotationalPositionIndicator
             If m_suffixShow <> value Then
                 m_suffixShow = value
                 Me.Value = m_Value
+                Invalidate()
             End If
-            Invalidate()
         End Set
     End Property
 
@@ -115,7 +156,8 @@ Public Class RotationalPositionIndicator
         End Get
         Set(value As Double)
             m_Value = value
-            value = value + m_zeroPosition
+            value += m_zeroPosition
+
             If value < 0 Then
                 If (Math.Abs(CDec(value) Mod CDec(360.0F)) >= 337.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) <= 360.0F) OrElse (Math.Abs(CDec(value) Mod CDec(360.0F)) >= 0.0F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 22.5F) Then m_suffix = " E"
                 If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 22.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 67.5F Then m_suffix = " SE"
@@ -135,11 +177,13 @@ Public Class RotationalPositionIndicator
                 If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 247.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 292.5F Then m_suffix = " S"
                 If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 292.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 337.5F Then m_suffix = " SE"
             End If
+
             If m_suffixShow Then
                 m_string = Format(CDec(m_Value) Mod CDec(360.0F), "0.0") & "°" & m_suffix
             Else
                 m_string = Format(CDec(m_Value) Mod CDec(360.0F), "0.0") & "°"
             End If
+
             Invalidate()
         End Set
     End Property
@@ -158,39 +202,31 @@ Public Class RotationalPositionIndicator
 
 #End Region
 
-#Region "Constructor"
-
-    Public Sub New()
-        MyBase.New()
-
-        SetStyle(ControlStyles.OptimizedDoubleBuffer Or ControlStyles.AllPaintingInWmPaint Or ControlStyles.UserPaint Or ControlStyles.ResizeRedraw Or ControlStyles.ContainerControl Or ControlStyles.SupportsTransparentBackColor, True)
-        MyBase.DoubleBuffered = True
-        DoubleBuffered = True
-        MyBase.BackColor = Color.Transparent
-        MyBase.ForeColor = Color.Black
-        Size = New Size(160, 160)
-        MinimumSize = New Size(60, 60)
-    End Sub
-
-#End Region
-
 #Region "Protected Metods"
 
-    Protected Overrides Sub OnPaint(ByVal e As System.Windows.Forms.PaintEventArgs)
+    Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
         Dim rect As RectangleF = New RectangleF(New PointF(1.0F, 1.0F), New SizeF(Width - 2, Height - 2))
         Dim rect2 As RectangleF = New RectangleF(New PointF(4.0F, 4.0F), New SizeF(Width - 8, Height - 8))
         Dim rect3 As RectangleF = New RectangleF(New PointF(Width / 2.0F - Height * 0.3F / 7.0F, Height * 3.1F / 7.0F), New SizeF(Height * 0.8F / 7.0F, Height * 0.8F / 7.0F))
 
-        e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality
+        e.Graphics.SmoothingMode = SmoothingMode.HighQuality
         e.Graphics.FillEllipse(New SolidBrush(ControlPaint.Light(m_circleColor)), rect)
         e.Graphics.FillEllipse(New SolidBrush(m_circleColor), rect2)
 
-        If RPI_ZeroLinePosition = Zero.N Then e.Graphics.DrawLine(New Pen(m_zeroLineColor), New Point(Width / 2, 1.0F), New Point(Width / 2, Height / 2))
-        If RPI_ZeroLinePosition = Zero.E Then e.Graphics.DrawLine(New Pen(m_zeroLineColor), New Point(Width - 2.0F, Height / 2), New Point(Width / 2, Height / 2))
-        If RPI_ZeroLinePosition = Zero.W Then e.Graphics.DrawLine(New Pen(m_zeroLineColor), New Point(2.0F, Width / 2), New Point(Width / 2, Height / 2))
-        If RPI_ZeroLinePosition = Zero.S Then e.Graphics.DrawLine(New Pen(m_zeroLineColor), New Point(Width / 2, Height - 2.0F), New Point(Width / 2, Height / 2))
+        If m_zeroLineShow Then
+            Select Case RPI_ZeroLinePosition
+                Case Zero.N
+                    e.Graphics.DrawLine(New Pen(m_zeroLineColor), New Point(Width / 2, 1.0F), New Point(Width / 2, Height / 2))
+                Case Zero.E
+                    e.Graphics.DrawLine(New Pen(m_zeroLineColor), New Point(Width - 2.0F, Height / 2), New Point(Width / 2, Height / 2))
+                Case Zero.W
+                    e.Graphics.DrawLine(New Pen(m_zeroLineColor), New Point(2.0F, Width / 2), New Point(Width / 2, Height / 2))
+                Case Else 'Zero.S
+                    e.Graphics.DrawLine(New Pen(m_zeroLineColor), New Point(Width / 2, Height - 2.0F), New Point(Width / 2, Height / 2))
+            End Select
+        End If
 
         e.Graphics.TranslateTransform(ClientRectangle.Width / 2.0F, ClientRectangle.Height / 2.0F)
         e.Graphics.RotateTransform(-(m_Value + CSng(m_zeroPosition)))
@@ -201,10 +237,16 @@ Public Class RotationalPositionIndicator
                                                New PointF(Width * 5.25F / 7.0F, Height * 10.0F / 16.0F), New PointF(Width * 5.25F / 7.0F, Height * 3.9F / 7.0F),
                                                New PointF(Width / 2.0F, Height * 3.9F / 7.0F)}
 
-        Dim gp As New System.Drawing.Drawing2D.GraphicsPath
+        Dim gp As New GraphicsPath
         gp.AddPolygon(points)
 
-        Using lgBrush As New System.Drawing.Drawing2D.LinearGradientBrush(New Point(Width * 5.25F / 7.0F, Height * 6.0F / 16.0F), New Point(Width * 5.25F / 7.0F, Height * 10.0F / 16.0F), m_arrowColor, ControlPaint.LightLight(m_arrowColor))
+        Dim lgBlend As New Blend(11) With {
+            .Positions = New Single() {0.0F, 0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.6F, 0.7F, 0.8F, 0.9F, 1.0F},
+            .Factors = New Single() {0.0F, 0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.4F, 0.3F, 0.2F, 0.1F, 0.0F}
+        }
+
+        Using lgBrush As New LinearGradientBrush(New Point(Width / 2, Height / 3), New Point(Width / 2, 2 * Height / 3), m_arrowColor, ControlPaint.Dark(m_arrowColor))
+            lgBrush.Blend = lgBlend
             e.Graphics.FillEllipse(lgBrush, rect3)
             e.Graphics.FillPolygon(lgBrush, points)
         End Using
@@ -222,21 +264,11 @@ Public Class RotationalPositionIndicator
 
     End Sub
 
-    Protected Overrides Sub Dispose(ByVal disposing As Boolean)
-        Try
-            If disposing Then
-
-            End If
-        Finally
-            MyBase.Dispose(disposing)
-        End Try
-    End Sub
-
 #End Region
 
 #Region "Private Methods"
 
-    Private Sub RotationalPositionIndicator_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
+    Private Sub RotationalPositionIndicator_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         Width = Height
     End Sub
 
