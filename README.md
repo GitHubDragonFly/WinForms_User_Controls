@@ -1,5 +1,5 @@
 # UserControls
-Relatively simple WinForms user controls.
+Relatively simple WinForms user controls for VB or C# projects.
 
 # Functionality
 - ButtonControlArray
