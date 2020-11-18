@@ -289,45 +289,47 @@ Public Class RotatingImage2
 
         '* Rotate the image by using the arbitrary angle set by user.
         '* Move the origin to the selected center of rotation:
-        If m_Anchor = AnchorPoint.BottomCenter Then
-            e.Graphics.TranslateTransform(ClientRectangle.Width / 2.0F, ClientRectangle.Height)
-        ElseIf m_Anchor = AnchorPoint.BottomLeft Then
-            e.Graphics.TranslateTransform(0.0F, ClientRectangle.Height)
-        ElseIf m_Anchor = AnchorPoint.BottomRight Then
-            e.Graphics.TranslateTransform(ClientRectangle.Width, ClientRectangle.Height)
-        ElseIf m_Anchor = AnchorPoint.MiddleCenter Then
-            e.Graphics.TranslateTransform(ClientRectangle.Width / 2.0F, ClientRectangle.Height / 2.0F)
-        ElseIf m_Anchor = AnchorPoint.MiddleLeft Then
-            e.Graphics.TranslateTransform(0.0F, ClientRectangle.Height / 2.0F)
-        ElseIf m_Anchor = AnchorPoint.MiddleRight Then
-            e.Graphics.TranslateTransform(ClientRectangle.Width, ClientRectangle.Height / 2.0F)
-        ElseIf m_Anchor = AnchorPoint.TopCenter Then
-            e.Graphics.TranslateTransform(ClientRectangle.Width / 2.0F, 0.0F)
-        ElseIf m_Anchor = AnchorPoint.TopRight Then
-            e.Graphics.TranslateTransform(ClientRectangle.Width, 0.0F)
-        End If
+        Select Case m_Anchor
+            Case AnchorPoint.BottomCenter
+                e.Graphics.TranslateTransform(ClientRectangle.Width / 2.0F, ClientRectangle.Height)
+            Case AnchorPoint.BottomLeft
+                e.Graphics.TranslateTransform(0.0F, ClientRectangle.Height)
+            Case AnchorPoint.BottomRight
+                e.Graphics.TranslateTransform(ClientRectangle.Width, ClientRectangle.Height)
+            Case AnchorPoint.MiddleCenter
+                e.Graphics.TranslateTransform(ClientRectangle.Width / 2.0F, ClientRectangle.Height / 2.0F)
+            Case AnchorPoint.MiddleLeft
+                e.Graphics.TranslateTransform(0.0F, ClientRectangle.Height / 2.0F)
+            Case AnchorPoint.MiddleRight
+                e.Graphics.TranslateTransform(ClientRectangle.Width, ClientRectangle.Height / 2.0F)
+            Case AnchorPoint.TopCenter
+                e.Graphics.TranslateTransform(ClientRectangle.Width / 2.0F, 0.0F)
+            Case AnchorPoint.TopRight
+                e.Graphics.TranslateTransform(ClientRectangle.Width, 0.0F)
+        End Select
 
         '* Rotate the image:
         e.Graphics.RotateTransform(-m_Angle)
 
         '* Move the origin back to to the upper-left corner of the control:
-        If m_Anchor = AnchorPoint.BottomCenter Then
-            e.Graphics.TranslateTransform(-ClientRectangle.Width / 2.0F, -ClientRectangle.Height)
-        ElseIf Me.m_Anchor = AnchorPoint.BottomLeft Then
-            e.Graphics.TranslateTransform(0.0F, -ClientRectangle.Height)
-        ElseIf Me.m_Anchor = AnchorPoint.BottomRight Then
-            e.Graphics.TranslateTransform(-ClientRectangle.Width, -ClientRectangle.Height)
-        ElseIf Me.m_Anchor = AnchorPoint.MiddleCenter Then
-            e.Graphics.TranslateTransform(-ClientRectangle.Width / 2.0F, -ClientRectangle.Height / 2.0F)
-        ElseIf Me.m_Anchor = AnchorPoint.MiddleLeft Then
-            e.Graphics.TranslateTransform(0.0F, -ClientRectangle.Height / 2.0F)
-        ElseIf Me.m_Anchor = AnchorPoint.MiddleRight Then
-            e.Graphics.TranslateTransform(-ClientRectangle.Width, -ClientRectangle.Height / 2.0F)
-        ElseIf Me.m_Anchor = AnchorPoint.TopCenter Then
-            e.Graphics.TranslateTransform(-ClientRectangle.Width / 2.0F, 0.0F)
-        ElseIf Me.m_Anchor = AnchorPoint.TopRight Then
-            e.Graphics.TranslateTransform(-ClientRectangle.Width, 0.0F)
-        End If
+        Select Case m_Anchor
+            Case AnchorPoint.BottomCenter
+                e.Graphics.TranslateTransform(-ClientRectangle.Width / 2.0F, -ClientRectangle.Height)
+            Case AnchorPoint.BottomLeft
+                e.Graphics.TranslateTransform(0.0F, -ClientRectangle.Height)
+            Case AnchorPoint.BottomRight
+                e.Graphics.TranslateTransform(-ClientRectangle.Width, -ClientRectangle.Height)
+            Case AnchorPoint.MiddleCenter
+                e.Graphics.TranslateTransform(-ClientRectangle.Width / 2.0F, -ClientRectangle.Height / 2.0F)
+            Case AnchorPoint.MiddleLeft
+                e.Graphics.TranslateTransform(0.0F, -ClientRectangle.Height / 2.0F)
+            Case AnchorPoint.MiddleRight
+                e.Graphics.TranslateTransform(-ClientRectangle.Width, -ClientRectangle.Height / 2.0F)
+            Case AnchorPoint.TopCenter
+                e.Graphics.TranslateTransform(-ClientRectangle.Width / 2.0F, 0.0F)
+            Case AnchorPoint.TopRight
+                e.Graphics.TranslateTransform(-ClientRectangle.Width, 0.0F)
+        End Select
 
         '* Pass the current image to the FlipHV sub to flip it (if H or V flip is enabled) and display it
         FlipHV(e.Graphics, backImage, m_flipV, m_flipH)
@@ -347,9 +349,7 @@ Public Class RotatingImage2
     End Sub
 
     Private Sub RotatingImage_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-        If m_fixedAspect Then
-            Width = ratio * Height
-        End If
+        If m_fixedAspect Then Width = ratio * Height
     End Sub
 
     Private Sub Tmr_Tick(sender As Object, e As EventArgs) Handles Tmr.Tick
@@ -376,7 +376,7 @@ Public Class RotatingImage2
         '* No flipping - Destination Points are the same as original
         Dim points() As Point = {New Point(0, 0), New Point(Width, 0), New Point(0, Height)}
 
-        '* Flip image horizontally - Destination Points: (Width, 0) (0, 0); (Width, Height)
+        '* Flip image horizontally - Destination Points: (Width, 0); (0, 0); (Width, Height)
         If flipH Then points = {New Point(Width, 0), New Point(0, 0), New Point(Width, Height)}
 
         '* Flip image vertically
