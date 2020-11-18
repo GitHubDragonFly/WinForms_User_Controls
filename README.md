@@ -10,10 +10,12 @@ Relatively simple WinForms user controls for VB or C# projects.
 - MyRectangleShape
   - somewhat similar to the oval shape control but in rectangular form.
 - RotatingImage1
-  - a control that allows an image be rotated and/or flipped while being fully visible.
+  - a control that allows an image be rotated and/or flipped while being fully visible (no cut corners).
+  - middle-center anchor point for image rotation.
   - fixed aspet ratio.
 - RotatingImage2
-  - a control that allows 9 different anchor points for image rotation.
+  - a control that allows an image be rotated and/or flipped (with cut corners).
+  - allows 9 different anchor points for image rotation.
   - fixed or free aspet ratio.
   - intended for special images.
 - RotatingTextButton
@@ -21,7 +23,7 @@ Relatively simple WinForms user controls for VB or C# projects.
   - certain fonts will show as symbols.
 - RotationalPositionIndicator
   - a control which could potentially be used as a weather vane.
-  - zero point could be selected as either of N, E, S or W.
+  - zero point could be selected as either of E (0), N (90), W (270) or S (270).
 
 Check the screenshots for the visual appearance of each control.
 Read any comments present within the control's code.
