@@ -12,11 +12,11 @@ Relatively simple WinForms user controls for VB or C# projects.
 - RotatingImage1
   - a control that allows an image be rotated and/or flipped while being fully visible (no cut corners).
   - middle-center anchor point for image rotation.
-  - fixed aspet ratio.
+  - fixed aspect ratio.
 - RotatingImage2
   - a control that allows an image be rotated and/or flipped (with cut corners).
   - allows 9 different anchor points for image rotation.
-  - fixed or free aspet ratio.
+  - fixed or free aspect ratio.
   - intended for special images.
 - RotatingTextButton
   - a button control allowing horizontal, vertical and upside down text.
