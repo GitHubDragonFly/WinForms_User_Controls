@@ -347,35 +347,34 @@ Public Class MyOvalShape
                 Dim hBrush As New HatchBrush(DirectCast(Properties_efo.EllipseFillHatchStyle, HatchStyle), color1, color2)
 
                 If Not Properties_efo.EllipseFillColor = Color.Transparent Then
-                    If Properties_efo.EllipseFillType = EllipseFillTypeOption.Solid Then
-                        If m_EllipseFillColorON Then
-                            g.FillEllipse(New SolidBrush(Properties_efo.EllipseFill_ON_Color), FillBounds)
-                        Else
-                            g.FillEllipse(New SolidBrush(Properties_efo.EllipseFillColor), FillBounds)
-                        End If
-                    End If
-                    If Properties_efo.EllipseFillType = EllipseFillTypeOption.PathGradient Then
-                        g.FillEllipse(pgBrush, FillBounds)
-                    End If
-                    If Properties_efo.EllipseFillType = EllipseFillTypeOption.HatchStyle Then
-                        If Properties_efo.EllipseFillHatchStyleBackground = HStyleBground.Glow Then
+                    Select Case Properties_efo.EllipseFillType
+                        Case EllipseFillTypeOption.Solid
+                            If m_EllipseFillColorON Then
+                                g.FillEllipse(New SolidBrush(Properties_efo.EllipseFill_ON_Color), FillBounds)
+                            Else
+                                g.FillEllipse(New SolidBrush(Properties_efo.EllipseFillColor), FillBounds)
+                            End If
+                        Case EllipseFillTypeOption.PathGradient
                             g.FillEllipse(pgBrush, FillBounds)
-                            g.FillEllipse(hBrush, FillBounds)
-                        Else
-                            g.FillEllipse(hBrush, FillBounds)
-                        End If
-                    End If
-                    If Properties_efo.EllipseFillType = EllipseFillTypeOption.LinearGradient Then
-                        If Properties_efo.EllipseFillLinearGradientShape = EllipseFillLinearGradientShapeOption.Normal Then g.FillEllipse(lgBrush, FillBounds)
-                        If Properties_efo.EllipseFillLinearGradientShape = EllipseFillLinearGradientShapeOption.Triangular Then
-                            lgBrush.SetBlendTriangularShape(Properties_efo.EllipseFillLinearGradientShapeFocusPoint)
-                            g.FillEllipse(lgBrush, FillBounds)
-                        End If
-                        If Properties_efo.EllipseFillLinearGradientShape = EllipseFillLinearGradientShapeOption.SigmaBell Then
-                            lgBrush.SetSigmaBellShape(Properties_efo.EllipseFillLinearGradientShapeFocusPoint)
-                            g.FillEllipse(lgBrush, FillBounds)
-                        End If
-                    End If
+                        Case EllipseFillTypeOption.HatchStyle
+                            If Properties_efo.EllipseFillHatchStyleBackground = HStyleBground.Glow Then
+                                g.FillEllipse(pgBrush, FillBounds)
+                                g.FillEllipse(hBrush, FillBounds)
+                            Else
+                                g.FillEllipse(hBrush, FillBounds)
+                            End If
+                        Case EllipseFillTypeOption.LinearGradient
+                            Select Case Properties_efo.EllipseFillLinearGradientShape
+                                Case EllipseFillLinearGradientShapeOption.Normal
+                                    g.FillEllipse(lgBrush, FillBounds)
+                                Case EllipseFillLinearGradientShapeOption.Triangular
+                                    lgBrush.SetBlendTriangularShape(Properties_efo.EllipseFillLinearGradientShapeFocusPoint)
+                                    g.FillEllipse(lgBrush, FillBounds)
+                                Case EllipseFillLinearGradientShapeOption.SigmaBell
+                                    lgBrush.SetSigmaBellShape(Properties_efo.EllipseFillLinearGradientShapeFocusPoint)
+                                    g.FillEllipse(lgBrush, FillBounds)
+                            End Select
+                    End Select
                 End If
 
                 If Properties_efo.EllipseFillType = EllipseFillTypeOption.Arc Then
@@ -394,9 +393,7 @@ Public Class MyOvalShape
                             g.DrawArc(New Pen(tempColor, Properties_efo.ArcPieLineWidth), FillBounds, -Properties_efo.ArcPieStartAngle, -Properties_efo.ArcPieSweepAngle)
                         End If
                     End If
-                End If
-
-                If Properties_efo.EllipseFillType = EllipseFillTypeOption.Pie Then
+                ElseIf Properties_efo.EllipseFillType = EllipseFillTypeOption.Pie Then
                     FillBounds.Inflate(-Properties_efo.ArcPieLineWidth / 2, -Properties_efo.ArcPieLineWidth / 2)
 
                     Dim temp1Color, temp2Color As Color
@@ -416,11 +413,15 @@ Public Class MyOvalShape
                     If m_ArcPieSymmetryON Then
                         g.FillPie(New SolidBrush(temp2Color), FillBounds, -Properties_efo.ArcPieStartAngle + 180, -Properties_efo.ArcPieSweepAngle)
                         g.FillPie(New SolidBrush(temp2Color), FillBounds, -Properties_efo.ArcPieStartAngle, -Properties_efo.ArcPieSweepAngle)
-                        If Not Properties_efo.ArcPieLineWidth = 0 Then g.DrawPie(New Pen(temp1Color, Properties_efo.ArcPieLineWidth), FillBounds, -Properties_efo.ArcPieStartAngle + 180, -Properties_efo.ArcPieSweepAngle)
-                        If Not Properties_efo.ArcPieLineWidth = 0 Then g.DrawPie(New Pen(temp1Color, Properties_efo.ArcPieLineWidth), FillBounds, -Properties_efo.ArcPieStartAngle, -Properties_efo.ArcPieSweepAngle)
+
+                        If Properties_efo.ArcPieLineWidth <> 0 Then
+                            g.DrawPie(New Pen(temp1Color, Properties_efo.ArcPieLineWidth), FillBounds, -Properties_efo.ArcPieStartAngle + 180, -Properties_efo.ArcPieSweepAngle)
+                            g.DrawPie(New Pen(temp1Color, Properties_efo.ArcPieLineWidth), FillBounds, -Properties_efo.ArcPieStartAngle, -Properties_efo.ArcPieSweepAngle)
+                        End If
                     Else
                         g.FillPie(New SolidBrush(temp2Color), FillBounds, -Properties_efo.ArcPieStartAngle, -Properties_efo.ArcPieSweepAngle)
-                        If Not Properties_efo.ArcPieLineWidth = 0 Then g.DrawPie(New Pen(temp1Color, Properties_efo.ArcPieLineWidth), FillBounds, -Properties_efo.ArcPieStartAngle, -Properties_efo.ArcPieSweepAngle)
+
+                        If Properties_efo.ArcPieLineWidth <> 0 Then g.DrawPie(New Pen(temp1Color, Properties_efo.ArcPieLineWidth), FillBounds, -Properties_efo.ArcPieStartAngle, -Properties_efo.ArcPieSweepAngle)
                     End If
                 End If
             End If
