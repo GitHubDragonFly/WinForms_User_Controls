@@ -368,48 +368,51 @@ public class MyOvalShape : Control
 
 				if (!(Properties_efo.EllipseFillColor == Color.Transparent))
 				{
-					if (Properties_efo.EllipseFillType == EllipseFillTypeOption.Solid)
-					{
-						if (m_EllipseFillColorON)
-						{
-							g.FillEllipse(new SolidBrush(Properties_efo.EllipseFill_ON_Color), FillBounds);
-						}
-						else
-						{
-							g.FillEllipse(new SolidBrush(Properties_efo.EllipseFillColor), FillBounds);
-						}
-					}
-					if (Properties_efo.EllipseFillType == EllipseFillTypeOption.PathGradient)
-					{
-						g.FillEllipse(pgBrush, FillBounds);
-					}
-					if (Properties_efo.EllipseFillType == EllipseFillTypeOption.HatchStyle)
-					{
-						if (Properties_efo.EllipseFillHatchStyleBackground == HStyleBground.Glow)
-						{
+                    switch (Properties_efo.EllipseFillType)
+                    {
+						case EllipseFillTypeOption.Solid:
+							if (m_EllipseFillColorON)
+								g.FillEllipse(new SolidBrush(Properties_efo.EllipseFill_ON_Color), FillBounds);
+							else
+								g.FillEllipse(new SolidBrush(Properties_efo.EllipseFillColor), FillBounds);
+
+							break;
+						case EllipseFillTypeOption.PathGradient:
 							g.FillEllipse(pgBrush, FillBounds);
-							g.FillEllipse(hBrush, FillBounds);
-						}
-						else
-						{
-							g.FillEllipse(hBrush, FillBounds);
-						}
-					}
-					if (Properties_efo.EllipseFillType == EllipseFillTypeOption.LinearGradient)
-					{
-						if (Properties_efo.EllipseFillLinearGradientShape == EllipseFillLinearGradientShapeOption.Normal)
-							g.FillEllipse(lgBrush, FillBounds);
-						if (Properties_efo.EllipseFillLinearGradientShape == EllipseFillLinearGradientShapeOption.Triangular)
-						{
-							lgBrush.SetBlendTriangularShape(Properties_efo.EllipseFillLinearGradientShapeFocusPoint);
-							g.FillEllipse(lgBrush, FillBounds);
-						}
-						if (Properties_efo.EllipseFillLinearGradientShape == EllipseFillLinearGradientShapeOption.SigmaBell)
-						{
-							lgBrush.SetSigmaBellShape(Properties_efo.EllipseFillLinearGradientShapeFocusPoint);
-							g.FillEllipse(lgBrush, FillBounds);
-						}
-					}
+
+							break;
+						case EllipseFillTypeOption.HatchStyle:
+							if (Properties_efo.EllipseFillHatchStyleBackground == HStyleBground.Glow)
+							{
+								g.FillEllipse(pgBrush, FillBounds);
+								g.FillEllipse(hBrush, FillBounds);
+							}
+							else
+								g.FillEllipse(hBrush, FillBounds);
+
+							break;
+                        case EllipseFillTypeOption.LinearGradient:
+                            switch (Properties_efo.EllipseFillLinearGradientShape)
+                            {
+                                case EllipseFillLinearGradientShapeOption.Normal:
+									g.FillEllipse(lgBrush, FillBounds);
+
+									break;
+                                case EllipseFillLinearGradientShapeOption.Triangular:
+									lgBrush.SetBlendTriangularShape(Properties_efo.EllipseFillLinearGradientShapeFocusPoint);
+									g.FillEllipse(lgBrush, FillBounds);
+
+									break;
+                                case EllipseFillLinearGradientShapeOption.SigmaBell:
+									lgBrush.SetSigmaBellShape(Properties_efo.EllipseFillLinearGradientShapeFocusPoint);
+									g.FillEllipse(lgBrush, FillBounds);
+
+									break;
+                            }
+
+							break;
+                    }
+
 				}
 
 				if (Properties_efo.EllipseFillType == EllipseFillTypeOption.Arc)
@@ -431,14 +434,9 @@ public class MyOvalShape : Control
 							g.DrawArc(new Pen(tempColor, Properties_efo.ArcPieLineWidth), FillBounds, -Properties_efo.ArcPieStartAngle, -Properties_efo.ArcPieSweepAngle);
 						}
 						else
-						{
 							g.DrawArc(new Pen(tempColor, Properties_efo.ArcPieLineWidth), FillBounds, -Properties_efo.ArcPieStartAngle, -Properties_efo.ArcPieSweepAngle);
-						}
 					}
-				}
-
-				if (Properties_efo.EllipseFillType == EllipseFillTypeOption.Pie)
-				{
+				} else if (Properties_efo.EllipseFillType == EllipseFillTypeOption.Pie) {
 					FillBounds.Inflate(-Convert.ToInt16(Properties_efo.ArcPieLineWidth / 2), -Convert.ToInt16(Properties_efo.ArcPieLineWidth / 2));
 
 					Color temp1Color, temp2Color;
@@ -457,14 +455,17 @@ public class MyOvalShape : Control
 					{
 						g.FillPie(new SolidBrush(temp2Color), FillBounds, -Properties_efo.ArcPieStartAngle + 180, -Properties_efo.ArcPieSweepAngle);
 						g.FillPie(new SolidBrush(temp2Color), FillBounds, -Properties_efo.ArcPieStartAngle, -Properties_efo.ArcPieSweepAngle);
+
 						if (!(Properties_efo.ArcPieLineWidth == 0))
+						{
 							g.DrawPie(new Pen(temp1Color, Properties_efo.ArcPieLineWidth), FillBounds, -Properties_efo.ArcPieStartAngle + 180, -Properties_efo.ArcPieSweepAngle);
-						if (!(Properties_efo.ArcPieLineWidth == 0))
 							g.DrawPie(new Pen(temp1Color, Properties_efo.ArcPieLineWidth), FillBounds, -Properties_efo.ArcPieStartAngle, -Properties_efo.ArcPieSweepAngle);
+						}
 					}
 					else
 					{
 						g.FillPie(new SolidBrush(temp2Color), FillBounds, -Properties_efo.ArcPieStartAngle, -Properties_efo.ArcPieSweepAngle);
+
 						if (!(Properties_efo.ArcPieLineWidth == 0))
 							g.DrawPie(new Pen(temp1Color, Properties_efo.ArcPieLineWidth), FillBounds, -Properties_efo.ArcPieStartAngle, -Properties_efo.ArcPieSweepAngle);
 					}
@@ -476,11 +477,7 @@ public class MyOvalShape : Control
 
 		if (!string.IsNullOrEmpty(Text))
 		{
-			StringFormat sf = new StringFormat
-			{
-				Alignment = StringAlignment.Center,
-				LineAlignment = StringAlignment.Center
-			};
+			StringFormat sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
 			e.Graphics.DrawString(Text, Font, new SolidBrush(ForeColor), new Point(Width / 2, Height / 2), sf);
 		}
 
