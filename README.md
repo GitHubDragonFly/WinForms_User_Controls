@@ -38,6 +38,4 @@ These are all licensed under MIT License.
 Any and all trademarks, either directly on indirectly mentioned in any of the controls, belong to their respective owners.
 
 # Useful Resources
-The forum of AdvancedHMI website, which is another open source project providing a large number of user controls including a special version of all the controls included in this repository:
-
-https://www.advancedhmi.com/forum/
+The AdvancedHMI website [forum](https://www.advancedhmi.com/forum/), which is another open source project providing a large number of user controls including a special version of all the controls included in this repository.
