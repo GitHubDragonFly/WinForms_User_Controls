@@ -3,11 +3,11 @@
 //****************************************************************************
 
 using System;
-using System.Drawing;
-using System.Windows.Forms;
 using System.ComponentModel;
+using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
 public class MyOvalShape : Control
@@ -17,7 +17,7 @@ public class MyOvalShape : Control
 	private Rectangle FillBounds;
 	private Image BackImage;
 
-	private readonly System.Windows.Forms.Timer ArcPieRotateTimer;
+	private readonly Timer ArcPieRotateTimer;
 
 	#region "Constructor/Destructor"
 
@@ -31,7 +31,7 @@ public class MyOvalShape : Control
 		ForeColor = Color.DarkBlue;
 		Size = new Size(200, 200);
 		MinimumSize = new Size(65, 65);
-		ArcPieRotateTimer = new System.Windows.Forms.Timer();
+		ArcPieRotateTimer = new Timer();
 
 		Resize += MyOvalShape_Resize;
 		Properties_efo.PropertyChanged += EllipseFillOptions_PropertyChanged;
@@ -45,6 +45,7 @@ public class MyOvalShape : Control
 		Properties_efo.PropertyChanged -= EllipseFillOptions_PropertyChanged;
 		Properties_elo.PropertyChanged -= EllipseLineOptions_PropertyChanged;
 		ArcPieRotateTimer.Tick -= ArcPieRotateTimer_Tick;
+
 		base.Dispose(disposing);
 	}
 
@@ -151,8 +152,11 @@ public class MyOvalShape : Control
 		get { return Properties_elo; }
 		set
 		{
-			Properties_elo = value;
-			Invalidate();
+			if (Properties_elo != value)
+            {
+				Properties_elo = value;
+				Invalidate();
+			}
 		}
 	}
 
@@ -163,8 +167,11 @@ public class MyOvalShape : Control
 		get { return Properties_efo; }
 		set
 		{
-			Properties_efo = value;
-			Invalidate();
+			if (Properties_efo != value)
+            {
+				Properties_efo = value;
+				Invalidate();
+			}
 		}
 	}
 
@@ -175,9 +182,12 @@ public class MyOvalShape : Control
 		get { return m_EllipseAspectRatioOption; }
 		set
 		{
-			m_EllipseAspectRatioOption = value;
-			MyOvalShape_Resize(this, System.EventArgs.Empty);
-			Invalidate();
+			if (m_EllipseAspectRatioOption != value)
+            {
+				m_EllipseAspectRatioOption = value;
+				MyOvalShape_Resize(this, EventArgs.Empty);
+				Invalidate();
+			}
 		}
 	}
 
@@ -188,8 +198,11 @@ public class MyOvalShape : Control
 		get { return m_EllipseLineColorON; }
 		set
 		{
-			m_EllipseLineColorON = value;
-			Invalidate();
+			if (m_EllipseLineColorON != value)
+			{
+				m_EllipseLineColorON = value;
+				Invalidate();
+			}
 		}
 	}
 
@@ -200,8 +213,11 @@ public class MyOvalShape : Control
 		get { return m_EllipseFillColorON; }
 		set
 		{
-			m_EllipseFillColorON = value;
-			Invalidate();
+			if (m_EllipseFillColorON != value)
+            {
+				m_EllipseFillColorON = value;
+				Invalidate();
+			}
 		}
 	}
 
@@ -212,8 +228,11 @@ public class MyOvalShape : Control
 		get { return m_PieFillColorON; }
 		set
 		{
-			m_PieFillColorON = value;
-			Invalidate();
+			if (m_PieFillColorON != value)
+            {
+				m_PieFillColorON = value;
+				Invalidate();
+			}
 		}
 	}
 
@@ -224,8 +243,11 @@ public class MyOvalShape : Control
 		get { return m_ArcPieLineColorON; }
 		set
 		{
-			m_ArcPieLineColorON = value;
-			Invalidate();
+			if (m_ArcPieLineColorON != value)
+            {
+				m_ArcPieLineColorON = value;
+				Invalidate();
+			}
 		}
 	}
 
@@ -236,8 +258,11 @@ public class MyOvalShape : Control
 		get { return m_ArcPieSymmetryON; }
 		set
 		{
-			m_ArcPieSymmetryON = value;
-			Invalidate();
+			if (m_ArcPieSymmetryON != value)
+            {
+				m_ArcPieSymmetryON = value;
+				Invalidate();
+			}
 		}
 	}
 
@@ -274,8 +299,13 @@ public class MyOvalShape : Control
 				MessageBox.Show("Keep this value above 20ms.");
 				return;
 			}
-			m_ArcPieRotateInterval = value;
-			ArcPieRotateTimer.Interval = m_ArcPieRotateInterval;
+
+			if (m_ArcPieRotateInterval != value)
+            {
+				m_ArcPieRotateInterval = value;
+				ArcPieRotateTimer.Interval = m_ArcPieRotateInterval;
+				Invalidate();
+			}
 		}
 	}
 
@@ -286,8 +316,11 @@ public class MyOvalShape : Control
 		get { return m_ArcPieRotateDir; }
 		set
 		{
-			m_ArcPieRotateDir = value;
-			Invalidate();
+			if (m_ArcPieRotateDir != value)
+            {
+				m_ArcPieRotateDir = value;
+				Invalidate();
+			}
 		}
 	}
 
@@ -300,7 +333,7 @@ public class MyOvalShape : Control
 		get { return base.Text; }
 		set
 		{
-			if (string.Compare(base.Text, value) != 0)
+			if (base.Text != value)
 			{
 				base.Text = value;
 				Invalidate();
@@ -312,7 +345,7 @@ public class MyOvalShape : Control
 
 	#region "Protected Methods"
 
-	protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
+	protected override void OnPaint(PaintEventArgs e)
 	{
 		base.OnPaint(e);
 
@@ -498,7 +531,7 @@ public class MyOvalShape : Control
 		}
 	}
 
-	private void ArcPieRotateTimer_Tick(System.Object sender, System.EventArgs e)
+	private void ArcPieRotateTimer_Tick(object sender, EventArgs e)
 	{
 		if (m_ArcPieRotateDir == ArcPieRotateDir.CCW)
 		{
@@ -535,9 +568,7 @@ public class MyOvalShape : Control
 		public event PropertyChangedEventHandler PropertyChanged;
 		public delegate void PropertyChangedEventHandler(string propertyName);
 
-		public EllipseLineOptionsProperties()
-		{
-		}
+		public EllipseLineOptionsProperties() {	}
 
 		private Color _lineColor = Color.SteelBlue;
 		[Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible), RefreshProperties(RefreshProperties.All), Description("The Ellipse line color."), DefaultValue(typeof(Color), "SteelBlue")]
@@ -603,9 +634,7 @@ public class MyOvalShape : Control
 		public event PropertyChangedEventHandler PropertyChanged;
 		public delegate void PropertyChangedEventHandler(string propertyName);
 
-		public EllipseFillOptionsProperties()
-		{
-		}
+		public EllipseFillOptionsProperties() {	}
 
 		private EllipseFillTypeOption _EllipseFillType = EllipseFillTypeOption.PathGradient;
 		[Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible), RefreshProperties(RefreshProperties.All), Description("The Ellipse fill type (PathGradient, LinearGradient, HatchStyle, Solid, Pie and Arc)."), DefaultValue(EllipseFillTypeOption.PathGradient)]
@@ -984,8 +1013,8 @@ public class MyOvalShape : Control
 		//It was left in this format since it was used for 2 identical integer properties only.
 
 		private readonly TrackBar TrackBarControl = new TrackBar();
-
 		private readonly ToolTip toolTip1 = new ToolTip();
+
 		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
 		{
 			return UITypeEditorEditStyle.DropDown;
@@ -1014,11 +1043,9 @@ public class MyOvalShape : Control
 			return value;
 		}
 
-		private void TrackBarControl_Scroll(object sender, System.EventArgs e)
+		private void TrackBarControl_Scroll(object sender, EventArgs e)
 		{
 			toolTip1.SetToolTip(TrackBarControl, TrackBarControl.Value.ToString());
 		}
-
 	}
-
 }

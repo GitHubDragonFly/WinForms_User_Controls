@@ -3,11 +3,11 @@
 //****************************************************************************
 
 using System;
-using System.Drawing;
-using System.Windows.Forms;
 using System.ComponentModel;
+using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
 public class MyRectangleShape : Control
@@ -16,7 +16,6 @@ public class MyRectangleShape : Control
 
 	public MyRectangleShape() : base()
 	{
-
 		SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.ResizeRedraw | ControlStyles.ContainerControl | ControlStyles.SupportsTransparentBackColor, true);
 		base.DoubleBuffered = true;
 		DoubleBuffered = true;
@@ -35,6 +34,7 @@ public class MyRectangleShape : Control
 		Resize -= MyRectangleShape_Resize;
 		Properties_rlo.PropertyChanged -= RectangleLineOptions_PropertyChanged;
 		Properties_rfo.PropertyChanged -= RectangleFillOptions_PropertyChanged;
+
 		base.Dispose(disposing);
 	}
 
@@ -55,9 +55,12 @@ public class MyRectangleShape : Control
 		get { return m_RectangleAspectRatioOption; }
 		set
 		{
-			m_RectangleAspectRatioOption = value;
-			MyRectangleShape_Resize(this, System.EventArgs.Empty);
-			Invalidate();
+			if (m_RectangleAspectRatioOption != value)
+            {
+				m_RectangleAspectRatioOption = value;
+				MyRectangleShape_Resize(this, EventArgs.Empty);
+				Invalidate();
+			}
 		}
 	}
 
@@ -68,8 +71,11 @@ public class MyRectangleShape : Control
 		get { return Properties_rlo; }
 		set
 		{
-			Properties_rlo = value;
-			Invalidate();
+			if (Properties_rlo != value)
+            {
+				Properties_rlo = value;
+				Invalidate();
+			}
 		}
 	}
 
@@ -80,8 +86,11 @@ public class MyRectangleShape : Control
 		get { return Properties_rfo; }
 		set
 		{
-			Properties_rfo = value;
-			Invalidate();
+			if (Properties_rfo != value)
+            {
+				Properties_rfo = value;
+				Invalidate();
+			}
 		}
 	}
 
@@ -92,8 +101,11 @@ public class MyRectangleShape : Control
 		get { return m_RectangleLineColorON; }
 		set
 		{
-			m_RectangleLineColorON = value;
-			Invalidate();
+			if (m_RectangleLineColorON != value)
+            {
+				m_RectangleLineColorON = value;
+				Invalidate();
+			}
 		}
 	}
 
@@ -104,8 +116,11 @@ public class MyRectangleShape : Control
 		get { return m_RectangleFillColorON; }
 		set
 		{
-			m_RectangleFillColorON = value;
-			Invalidate();
+			if (m_RectangleFillColorON != value)
+            {
+				m_RectangleFillColorON = value;
+				Invalidate();
+			}
 		}
 	}
 
@@ -118,7 +133,7 @@ public class MyRectangleShape : Control
 		get { return base.Text; }
 		set
 		{
-			if (string.Compare(base.Text, value) != 0)
+			if (base.Text != value)
 			{
 				base.Text = value;
 				Invalidate();
@@ -130,10 +145,10 @@ public class MyRectangleShape : Control
 
 	#region "Protected Methods"
 
-	protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
+	protected override void OnPaint(PaintEventArgs e)
 	{
 		base.OnPaint(e);
-		e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+		e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
 
 		Rectangle rect1 = new Rectangle(Convert.ToInt16(Properties_rlo.RectangleLineWidth / 2f + 2f), Convert.ToInt16(Properties_rlo.RectangleLineWidth / 2f + 2f), Convert.ToInt16(Convert.ToSingle(Width) - Properties_rlo.RectangleLineWidth - 5f), Convert.ToInt16(Convert.ToSingle(Height) - Properties_rlo.RectangleLineWidth - 5f));
 		Rectangle rect2 = new Rectangle(Convert.ToInt16(Properties_rlo.RectangleLineWidth + 3.51f), Convert.ToInt16(Properties_rlo.RectangleLineWidth + 3.51f), Convert.ToInt16(Convert.ToSingle(Width) - 2f * Properties_rlo.RectangleLineWidth - 9f), Convert.ToInt16(Convert.ToSingle(Height) - 2f * Properties_rlo.RectangleLineWidth - 9f));
@@ -152,11 +167,7 @@ public class MyRectangleShape : Control
 			GraphicsPath gp = new GraphicsPath();
 			gp.AddRectangle(rect2);
 
-			PathGradientBrush pgBrush = new PathGradientBrush(gp)
-			{
-				CenterColor = color1,
-				SurroundColors = new Color[] { color2 }
-			};
+			PathGradientBrush pgBrush = new PathGradientBrush(gp) { CenterColor = color1, SurroundColors = new Color[] { color2 } };
 
 			LinearGradientBrush lgBrush = new LinearGradientBrush(rect2, color1, color2, Properties_rfo.RectangleFillLinearGradientAngle, true);
 
@@ -164,38 +175,50 @@ public class MyRectangleShape : Control
 
 			if (!(Properties_rfo.RectangleFillColor == Color.Transparent))
 			{
-				if (Properties_rfo.RectangleFillType == RectangleFillOptionsProperties.RectangleFillTypeOption.Solid)
-					e.Graphics.FillRectangle(new SolidBrush(Properties_rfo.RectangleFillColor), rect2);
-				if (Properties_rfo.RectangleFillType == RectangleFillOptionsProperties.RectangleFillTypeOption.PathGradient)
-					e.Graphics.FillRectangle(pgBrush, rect2);
-				if (Properties_rfo.RectangleFillType == RectangleFillOptionsProperties.RectangleFillTypeOption.HatchStyle)
-				{
-					if (Properties_rfo.RectangleFillHatchStyleBackground == RectangleFillOptionsProperties.HStyleBground.Glow)
-					{
+                switch (Properties_rfo.RectangleFillType)
+                {
+					case RectangleFillOptionsProperties.RectangleFillTypeOption.Solid:
+						e.Graphics.FillRectangle(new SolidBrush(Properties_rfo.RectangleFillColor), rect2);
+
+						break;
+					case RectangleFillOptionsProperties.RectangleFillTypeOption.PathGradient:
 						e.Graphics.FillRectangle(pgBrush, rect2);
-						e.Graphics.FillRectangle(hBrush, rect2);
-					}
-					else
-					{
-						e.Graphics.FillRectangle(new SolidBrush(BackColor), rect2);
-						e.Graphics.FillRectangle(hBrush, rect2);
-					}
-				}
-				if (Properties_rfo.RectangleFillType == RectangleFillOptionsProperties.RectangleFillTypeOption.LinearGradient)
-				{
-					if (Properties_rfo.RectangleFillLinearGradientShape == RectangleFillOptionsProperties.RectangleFillLinearGradientShapeOption.Normal)
-						e.Graphics.FillRectangle(lgBrush, rect2);
-					if (Properties_rfo.RectangleFillLinearGradientShape == RectangleFillOptionsProperties.RectangleFillLinearGradientShapeOption.Triangular)
-					{
-						lgBrush.SetBlendTriangularShape(Properties_rfo.RectangleFillLinearGradientShapeFocusPoint);
-						e.Graphics.FillRectangle(lgBrush, rect2);
-					}
-					if (Properties_rfo.RectangleFillLinearGradientShape == RectangleFillOptionsProperties.RectangleFillLinearGradientShapeOption.SigmaBell)
-					{
-						lgBrush.SetSigmaBellShape(Properties_rfo.RectangleFillLinearGradientShapeFocusPoint);
-						e.Graphics.FillRectangle(lgBrush, rect2);
-					}
-				}
+
+						break;
+					case RectangleFillOptionsProperties.RectangleFillTypeOption.HatchStyle:
+						if (Properties_rfo.RectangleFillHatchStyleBackground == RectangleFillOptionsProperties.HStyleBground.Glow)
+						{
+							e.Graphics.FillRectangle(pgBrush, rect2);
+							e.Graphics.FillRectangle(hBrush, rect2);
+						}
+						else
+						{
+							e.Graphics.FillRectangle(new SolidBrush(BackColor), rect2);
+							e.Graphics.FillRectangle(hBrush, rect2);
+						}
+
+						break;
+                    case RectangleFillOptionsProperties.RectangleFillTypeOption.LinearGradient:
+                        switch (Properties_rfo.RectangleFillLinearGradientShape)
+                        {
+                            case RectangleFillOptionsProperties.RectangleFillLinearGradientShapeOption.Normal:
+								e.Graphics.FillRectangle(lgBrush, rect2);
+
+								break;
+                            case RectangleFillOptionsProperties.RectangleFillLinearGradientShapeOption.Triangular:
+								lgBrush.SetBlendTriangularShape(Properties_rfo.RectangleFillLinearGradientShapeFocusPoint);
+								e.Graphics.FillRectangle(lgBrush, rect2);
+
+								break;
+                            case RectangleFillOptionsProperties.RectangleFillLinearGradientShapeOption.SigmaBell:
+								lgBrush.SetSigmaBellShape(Properties_rfo.RectangleFillLinearGradientShapeFocusPoint);
+								e.Graphics.FillRectangle(lgBrush, rect2);
+
+								break;
+                        }
+
+						break;
+                }
 			}
 			else
 				e.Graphics.FillRectangle(new SolidBrush(Properties_rfo.RectangleFillColor), rect2);
@@ -211,15 +234,10 @@ public class MyRectangleShape : Control
 
 		if (!string.IsNullOrEmpty(Text))
 		{
-			StringFormat sf = new StringFormat
-			{
-				Alignment = StringAlignment.Center,
-				LineAlignment = StringAlignment.Center
-			};
+			StringFormat sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
 
 			e.Graphics.DrawString(Text, Font, new SolidBrush(ForeColor), new Point(Width / 2, Height / 2), sf);
 		}
-
 	}
 
 	#endregion
@@ -252,13 +270,10 @@ public class MyRectangleShape : Control
 	[Serializable(), TypeConverter(typeof(ExpandableObjectConverter)), RefreshProperties(RefreshProperties.Repaint), DesignTimeVisible(true)]
 	public class RectangleLineOptionsProperties
 	{
-
 		public event PropertyChangedEventHandler PropertyChanged;
 		public delegate void PropertyChangedEventHandler(string propertyName);
 
-		public RectangleLineOptionsProperties()
-		{
-		}
+		public RectangleLineOptionsProperties() { }
 
 		private Color _lineColor = Color.SteelBlue;
 		[Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible), RefreshProperties(RefreshProperties.All), Description("The Rectangle line color."), DefaultValue(typeof(Color), "SteelBlue")]
@@ -273,7 +288,7 @@ public class MyRectangleShape : Control
             }
 		}
 
-		private System.Drawing.Color _lineONcolor = System.Drawing.Color.Red;
+		private Color _lineONcolor = Color.Red;
 		[Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible), RefreshProperties(RefreshProperties.All), Description("The Rectangle line ON color."), DefaultValue(typeof(Color), "Red")]
 		public Color RectangleLine_ON_Color
 		{
@@ -324,9 +339,7 @@ public class MyRectangleShape : Control
 		public event PropertyChangedEventHandler PropertyChanged;
 		public delegate void PropertyChangedEventHandler(string propertyName);
 
-		public RectangleFillOptionsProperties()
-		{
-		}
+		public RectangleFillOptionsProperties() { }
 
 		private Color _brushColor = Color.Transparent;
 		[Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible), RefreshProperties(RefreshProperties.All), Description("The rectangle fill color."), DefaultValue(typeof(Color), "Transparent")]
@@ -341,7 +354,7 @@ public class MyRectangleShape : Control
             }
 		}
 
-		private System.Drawing.Color _fillONcolor = System.Drawing.Color.Red;
+		private Color _fillONcolor = Color.Red;
 		[Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible), RefreshProperties(RefreshProperties.All), Description("The rectangle fill ON color."), DefaultValue(typeof(Color), "Red")]
 		public Color RectangleFill_ON_Color
 		{
@@ -635,15 +648,15 @@ public class MyRectangleShape : Control
 		public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
 		{
 			IWindowsFormsEditorService editorService = null;
+
 			if (provider != null)
-			{
 				editorService = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
-			}
 
 			if (editorService != null)
 			{
 				nudControl.Value = Convert.ToDecimal(value);
 				editorService.DropDownControl(nudControl);
+
 				if (valueType == "Single")
 					value = Convert.ToSingle(nudControl.Value);
 				else if (valueType == "Integer")
@@ -663,8 +676,8 @@ public class MyRectangleShape : Control
 		//30-JUL-2015 Converted to VB Net By Godra and modified to use TrackBar instead of NumericUpDown control.
 
 		private readonly TrackBar TrackBarControl = new TrackBar();
-
 		private readonly ToolTip toolTip1 = new ToolTip();
+
 		public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
 		{
 			return UITypeEditorEditStyle.DropDown;
@@ -673,10 +686,9 @@ public class MyRectangleShape : Control
 		public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
 		{
 			IWindowsFormsEditorService editorService = null;
+
 			if (provider != null)
-			{
 				editorService = provider.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
-			}
 
 			if (editorService != null)
 			{
@@ -695,12 +707,10 @@ public class MyRectangleShape : Control
 			return value;
 		}
 
-		private void TrackBarControl_Scroll(object sender, System.EventArgs e)
+		private void TrackBarControl_Scroll(object sender, EventArgs e)
 		{
 			toolTip1.SetToolTip(TrackBarControl, TrackBarControl.Value.ToString());
 		}
-
 	}
-
 }
 
