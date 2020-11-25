@@ -158,30 +158,54 @@ Public Class RotationalPositionIndicator
             m_Value = value
             value += m_zeroPosition
 
-            If value < 0 Then
-                If (Math.Abs(CDec(value) Mod CDec(360.0F)) >= 337.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) <= 360.0F) OrElse (Math.Abs(CDec(value) Mod CDec(360.0F)) >= 0.0F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 22.5F) Then m_suffix = " E"
-                If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 22.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 67.5F Then m_suffix = " SE"
-                If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 67.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 112.5F Then m_suffix = " S"
-                If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 112.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 157.5F Then m_suffix = " SW"
-                If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 157.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 202.5F Then m_suffix = " W"
-                If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 202.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 247.5F Then m_suffix = " NW"
-                If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 247.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 292.5F Then m_suffix = " N"
-                If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 292.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 337.5F Then m_suffix = " NE"
+            Dim modValue = Math.Abs(CDec(value) Mod 360D)
+
+            If (modValue >= 337.5D AndAlso modValue <= 360D) OrElse (modValue >= 0 AndAlso modValue < 22.5D) Then
+                m_suffix = " E"
+            ElseIf modValue >= 22.5D AndAlso modValue < 67.5D Then
+                If value < 0 Then
+                    m_suffix = " SE"
+                Else
+                    m_suffix = " NE"
+                End If
+            ElseIf modValue >= 67.5D AndAlso modValue < 112.5D Then
+                If value < 0 Then
+                    m_suffix = " S"
+                Else
+                    m_suffix = " N"
+                End If
+            ElseIf modValue >= 112.5D AndAlso modValue < 157.5D Then
+                If value < 0 Then
+                    m_suffix = " SW"
+                Else
+                    m_suffix = " NW"
+                End If
+            ElseIf modValue >= 157.5D AndAlso modValue < 202.5D Then
+                m_suffix = " W"
+            ElseIf modValue >= 202.5D AndAlso modValue < 247.5D Then
+                If value < 0 Then
+                    m_suffix = " NW"
+                Else
+                    m_suffix = " SW"
+                End If
+            ElseIf modValue >= 247.5D AndAlso modValue < 292.5D Then
+                If value < 0 Then
+                    m_suffix = " N"
+                Else
+                    m_suffix = " S"
+                End If
             Else
-                If (Math.Abs(CDec(value) Mod CDec(360.0F)) >= 337.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) <= 360.0F) OrElse (Math.Abs(CDec(value) Mod CDec(360.0F)) >= 0.0F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 22.5F) Then m_suffix = " E"
-                If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 22.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 67.5F Then m_suffix = " NE"
-                If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 67.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 112.5F Then m_suffix = " N"
-                If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 112.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 157.5F Then m_suffix = " NW"
-                If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 157.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 202.5F Then m_suffix = " W"
-                If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 202.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 247.5F Then m_suffix = " SW"
-                If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 247.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 292.5F Then m_suffix = " S"
-                If Math.Abs(CDec(value) Mod CDec(360.0F)) >= 292.5F AndAlso Math.Abs(CDec(value) Mod CDec(360.0F)) < 337.5F Then m_suffix = " SE"
+                If value < 0 Then
+                    m_suffix = " NE"
+                Else
+                    m_suffix = " SE"
+                End If
             End If
 
             If m_suffixShow Then
-                m_string = Format(CDec(m_Value) Mod CDec(360.0F), "0.0") & "°" & m_suffix
+                m_string = Format(CDec(m_Value) Mod 360D, "0.0") & "°" & m_suffix
             Else
-                m_string = Format(CDec(m_Value) Mod CDec(360.0F), "0.0") & "°"
+                m_string = Format(CDec(m_Value) Mod 360D, "0.0") & "°"
             End If
 
             Invalidate()
