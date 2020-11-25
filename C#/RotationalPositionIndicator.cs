@@ -172,42 +172,54 @@ public class RotationalPositionIndicator : Control
 			m_Value = value;
 			value += (double)m_zeroPosition;
 
-			if (value < 0)
-			{
-				if ((Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 337.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) <= 360.0M) || (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 0.0M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 22.5M))
-					m_suffix = " E";
-				if (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 22.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 67.5M)
+			decimal modValue = Math.Abs((decimal)value % 360M);
+
+			if ((modValue >= 337.5M && modValue <= 360M) || (modValue >= 0 && modValue < 22.5M))
+				m_suffix = " E";
+			else if (modValue >= 22.5M && modValue < 67.5M)
+            {
+				if (value < 0)
 					m_suffix = " SE";
-				if (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 67.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 112.5M)
-					m_suffix = " S";
-				if (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 112.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 157.5M)
-					m_suffix = " SW";
-				if (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 157.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 202.5M)
-					m_suffix = " W";
-				if (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 202.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 247.5M)
-					m_suffix = " NW";
-				if (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 247.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 292.5M)
-					m_suffix = " N";
-				if (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 292.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 337.5M)
+				else
 					m_suffix = " NE";
 			}
-			else
-			{
-				if ((Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 337.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) <= 360M) || (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 0.0M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 22.5M))
-					m_suffix = " E";
-				if (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 22.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 67.5M)
-					m_suffix = " NE";
-				if (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 67.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 112.5M)
-					m_suffix = " N";
-				if (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 112.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 157.5M)
-					m_suffix = " NW";
-				if (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 157.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 202.5M)
-					m_suffix = " W";
-				if (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 202.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 247.5M)
-					m_suffix = " SW";
-				if (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 247.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 292.5M)
+			else if (modValue >= 67.5M && modValue < 112.5M)
+            {
+				if (value < 0)
 					m_suffix = " S";
-				if (Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) >= 292.5M && Math.Abs(Convert.ToDecimal(value) % Convert.ToDecimal(360f)) < 337.5M)
+				else
+					m_suffix = " N";
+			}
+			else if (modValue >= 112.5M && modValue < 157.5M)
+            {
+				if (value < 0)
+					m_suffix = " SW";
+				else
+					m_suffix = " NW";
+			}
+			else if (modValue >= 157.5M && modValue < 202.5M)
+            {
+				m_suffix = " W";
+			}
+			else if (modValue >= 202.5M && modValue < 247.5M)
+            {
+				if (value < 0)
+					m_suffix = " NW";
+				else
+					m_suffix = " SW";
+			}
+			else if (modValue >= 247.5M && modValue < 292.5M)
+            {
+				if (value < 0)
+					m_suffix = " N";
+				else
+					m_suffix = " S";
+			}
+            else
+            {
+				if (value < 0)
+					m_suffix = " NE";
+				else
 					m_suffix = " SE";
 			}
 
