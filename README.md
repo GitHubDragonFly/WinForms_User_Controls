@@ -39,7 +39,7 @@ Read any comments present within the control's code.
 These are all licensed under MIT License.
 
 # Trademarks
-Any and all trademarks, either directly on indirectly mentioned in any of the controls, belong to their respective owners.
+Any and all trademarks, either directly or indirectly mentioned in any of the controls, belong to their respective owners.
 
 # Useful Resources
 The AdvancedHMI website [forum](https://www.advancedhmi.com/forum/), which is another open source project providing a large number of user controls including a special version of all the controls included in this repository.
