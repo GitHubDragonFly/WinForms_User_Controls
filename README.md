@@ -32,7 +32,7 @@ Relatively simple WinForms user controls for VB or C# projects.
   - could potentially be used as a weather vane.
   - zero/home position could be selected as either of E (0), N (90), W (180) or S (270).
 
-Check the screenshots for the visual appearance of each control.
+Check the screenshots for possible visual appearances of each control.
 Read any comments present within the control's code.
 
 # Usage
