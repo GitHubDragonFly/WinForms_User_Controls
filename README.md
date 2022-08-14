@@ -37,7 +37,7 @@ Read any comments present within the control's code.
 
 # Usage
 - Download and extract the zip file of this repository.
-- In your project, either use the project or create a new folder, right-click it and add controls as Existing Items, rebuild the solution and locate these in the Toolbox.
+- In your project, either use the project itself or create a new folder, right-click it and add controls as Existing Items, rebuild the solution and locate these in the Toolbox.
 
 # Licensing
 These are all licensed under MIT License.
