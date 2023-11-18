@@ -1,9 +1,13 @@
 # UserControls
 Relatively simple WinForms user controls for VB or C# projects.
 
-# Screenshot
+# Screenshots
 
-![Start Page](screenshots/All%20User%20Controls.png?raw=true)
+![All User Controls](screenshots/All%20User%20Controls.png?raw=true)
+
+![Oval Shapes](screenshots/Oval%20Shapes.png?raw=true)
+
+![Rotating Text Button](screenshots/Rotating%20Text%20Button.png?raw=true)
 
 # Functionality
 - ButtonControlArray
